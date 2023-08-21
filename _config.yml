@@ -5,7 +5,7 @@
 # Site
 title: samkallon的博客
 subtitle: ''
-description: ''
+description: 'cesium 前端 GIS openlayer webgis'
 keywords:
 author: samkallon
 language: zh-CN
@@ -13,7 +13,8 @@ timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
+url: http://samkallon.top/blog
+root: /blog/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:

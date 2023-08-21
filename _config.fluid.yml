@@ -15,7 +15,8 @@
 # 全局
 # Global
 #---------------------------
-
+url: http://samkallon.top/blog
+root: /blog/
 # 用于浏览器标签的图标
 # Icon for browser tab
 favicon: /img/fluid.png
