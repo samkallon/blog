@@ -14,8 +14,9 @@ background: rgba(255, 255, 255, .7);
 backdrop-filter: blur(5px);
 border-radius: 5px;
 cursor: pointer;
+text-align: center;
 `
 div.onclick = function () {
-    window.open('http://samkallon.top/2023/11/14/hello-world/')
+    window.open('http://samkallon.top/2023/11/14/高性价比稳定梯子推荐/')
 }
 document.body.append(div)
