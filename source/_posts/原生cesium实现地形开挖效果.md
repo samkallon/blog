@@ -1,10 +1,8 @@
 ---
 title: 原生cesium实现地形开挖效果
 date: 2023-01-13 15:18:53
-tags: 
-- 前端
-- cesium
-- 
+tags: [前端, cesium]
+index_img: /img/kaiWa.png
 ---
 参考
 >https://blog.csdn.net/u013869554/article/details/120535940

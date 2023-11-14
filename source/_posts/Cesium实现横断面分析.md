@@ -1,12 +1,11 @@
 ---
 title: Cesium实现横断面分析
 date: 2023-08-21 15:28:21
-tags:
-- cesium
-- 管线
+tags: [cesium,管线]
+index_img: /img/hengDuanMian.png
 ---
 ## 效果
-{% asset_img img.jpg hdm%}
+{% asset_img hengDuanMian.png This is an image %}
 
 ## 实现思路
 1. 绘制一条线
