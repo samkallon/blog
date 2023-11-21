@@ -5,7 +5,7 @@
   "scripts": {
     "build": "hexo generate",
     "clean": "hexo clean",
-    "deploy": "hexo clean && hexo generate && hexo deploy && publish-sftp -r blog && publish-sftp -c blog",
+    "deploy": "hexo clean && hexo generate && publish-sftp -r blog && publish-sftp -c blog",
     "server": "hexo server"
   },
   "hexo": {
