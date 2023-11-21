@@ -5,7 +5,7 @@
   "scripts": {
     "build": "hexo generate",
     "clean": "hexo clean",
-    "deploy": "hexo clean && hexo generate",
+    "deploy": "hexo clean && hexo generate && hexo deploy && publish-sftp -r blog && publish-sftp -c blog",
     "server": "hexo server"
   },
   "hexo": {
@@ -22,6 +22,7 @@
     "hexo-renderer-marked": "^6.0.0",
     "hexo-renderer-stylus": "^2.1.0",
     "hexo-server": "^3.0.0",
-    "hexo-theme-landscape": "^0.0.3"
+    "hexo-theme-landscape": "^0.0.3",
+    "publish-sftp": "^1.0.6"
   }
 }
