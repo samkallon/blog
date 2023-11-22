@@ -1024,6 +1024,13 @@ links:
         link: "https://www.textworld.cn/",
         avatar: "https://www.textworld.cn/upload/2023/11/car-6053733_1280.png"
       }
+    - {
+      title: "SAO.REN",
+      intro: "",
+      link: "https://sao.ren/",
+      avatar: ""
+    }
+
 
   # 当成员头像加载失败时，替换为指定图片
   # When the member avatar fails to load, replace the specified image
