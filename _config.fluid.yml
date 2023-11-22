@@ -1025,6 +1025,18 @@ links:
         avatar: "https://www.textworld.cn/upload/2023/11/car-6053733_1280.png"
       }
     - {
+        title: "无名博客",
+        intro: "欢迎来到无名博客网站",
+        link: "https://barbed.cn/",
+        avatar: "https://oss.barbed.cn/sob_blog_image/2023_03_16/png/1085933470879842304.png"
+      }
+    - {
+        title: "Hsu Yeung 的博客",
+        intro: "前天看到了小兔，昨天是小鹿，今天是你。",
+        link: "https://www.hsuyeung.com",
+        avatar: "https://www.hsuyeung.com/img/avatar.jpg"
+      }
+    - {
         title: "SAO.REN",
         intro: "",
         link: "https://sao.ren/",
@@ -1042,7 +1054,6 @@ links:
         link: "https://ariesoxo.github.io/",
         avatar: ""
       }
-
 
   # 当成员头像加载失败时，替换为指定图片
   # When the member avatar fails to load, replace the specified image
