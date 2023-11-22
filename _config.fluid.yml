@@ -1016,7 +1016,7 @@ links:
         title: "Lxxxxxxy_",
         intro: "",
         link: "http://blog.lixingyu.cn:7090/",
-        avatar: "http://blog.lixingyu.cn:7090/authors/admin"
+        avatar: "http://blog.lixingyu.cn:7090/upload/star.ico"
       }
 
   # 当成员头像加载失败时，替换为指定图片
