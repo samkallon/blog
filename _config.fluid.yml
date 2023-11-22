@@ -1018,6 +1018,12 @@ links:
         link: "http://blog.lixingyu.cn:7090/",
         avatar: "http://blog.lixingyu.cn:7090/upload/star.ico"
       }
+    - {
+        title: "章文炳的博客",
+        intro: "",
+        link: "https://www.textworld.cn/",
+        avatar: "https://www.textworld.cn/upload/2023/11/car-6053733_1280.png"
+      }
 
   # 当成员头像加载失败时，替换为指定图片
   # When the member avatar fails to load, replace the specified image
