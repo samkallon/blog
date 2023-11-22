@@ -1007,11 +1007,17 @@ links:
         avatar: "https://www.iszy.cc/images/avatar.png"
       }
     - {
-      title: "FlowerTree",
-      intro: "An codeforces loser qaqqqqqq.",
-      link: "https://flowertreeandu.github.io/",
-      avatar: "https://gitee.com/FlowerTree233/flower-trees-graph-bed/raw/master/img/%E4%B9%83%E7%90%B31.jfif"
-    }
+        title: "FlowerTree",
+        intro: "An codeforces loser qaqqqqqq.",
+        link: "https://flowertreeandu.github.io/",
+        avatar: "https://gitee.com/FlowerTree233/flower-trees-graph-bed/raw/master/img/%E4%B9%83%E7%90%B31.jfif"
+      }
+    - {
+        title: "Lxxxxxxy_",
+        intro: "",
+        link: "http://blog.lixingyu.cn:7090/",
+        avatar: "http://blog.lixingyu.cn:7090/authors/admin"
+      }
 
   # 当成员头像加载失败时，替换为指定图片
   # When the member avatar fails to load, replace the specified image
