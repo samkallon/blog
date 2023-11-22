@@ -1015,7 +1015,7 @@ links:
   # Custom content at the bottom of the links
   custom:
     enable: true
-    content: '<hr><p>在下方留言申请加入我的友链，按如下格式提供信息(下方同时为本站信息)：</p><ul><li>博客名：samkallon的博客</li><li>简介：技术分享 && 生活日常</li><li>链接：https://samkallon.top</li><li>头像：https://samkallon.top/img/avatar.png</li></ul>'
+    content: '<hr><p>在下方留言申请加入我的友链，按如下格式提供信息(下方同时为本站信息)：</p><ul><li>博客名：samkallon</li><li>简介：技术分享 && 生活日常</li><li>链接：https://samkallon.top</li><li>头像：https://samkallon.top/img/avatar.png</li></ul>'
 
   # 评论插件
   # Comment plugin
