@@ -17,6 +17,6 @@ cursor: pointer;
 text-align: center;
 `
 div.onclick = function () {
-    window.open('http://samkallon.top/2023/11/14/高性价比稳定梯子推荐/')
+    window.open('https://samkallon.top/2023/11/14/高性价比稳定梯子推荐/')
 }
 document.body.append(div)
