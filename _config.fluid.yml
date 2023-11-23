@@ -1037,6 +1037,42 @@ links:
         avatar: "https://www.hsuyeung.com/img/avatar.jpg"
       }
     - {
+        title: "UncleCAT4",
+        intro: "思绪来得快去得也快，偶尔会在这里停留",
+        link: "https://yuanj.top",
+        avatar: "https://yuanj.top/images/avatar.png"
+      }
+    - {
+        title: "Vgbhfive's Blog",
+        intro: "95 后 | 程序员 | INFJ_A | 摩托车、骑行、足球 | 励志做会飙车的厨子",
+        link: "https://blog.vgbhfive.cn/",
+        avatar: "https://i.loli.net/2019/12/10/JF3dKDSkZoPz7h6.jpg"
+      }
+    - {
+        title: "安知鱼",
+        intro: "生活明朗，万物可爱",
+        link: "https://blog.sunguoqi.com/",
+        avatar: "https://npm.elemecdn.com/anzhiyu-blog-static@1.0.4/img/avatar.jpg"
+      }
+    - {
+        title: "扯淡有理",
+        intro: "扯自己的淡，让别人去喷吧！",
+        link: "https://naosense.github.io",
+        avatar: ""
+      }
+    - {
+        title: "NoOne",
+        intro: "Tech Lead",
+        link: "https://www.ifb.me/",
+        avatar: "https://www.ifb.me/_next/image?url=%2Fstatic%2Fimages%2Favatar.png&w=384&q=75"
+      }
+    - {
+        title: "陈晓拉尼",
+        intro: "自由自在 & 热爱生活",
+        link: " https://chenxiaolani.com",
+        avatar: "https://chenxiaolani.com/images/me/haha.jpeg"
+      }
+    - {
         title: "SAO.REN",
         intro: "",
         link: "https://sao.ren/",
