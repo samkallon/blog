@@ -23,7 +23,7 @@ index_img: /img/gsapChouLa.png
  */
 export function updateModelMatrix({tilesetId,sourceCenter,positionLatlng,
                                       scale={x:1,y:1,z:1},rotate={x:0,y:0,z:0}}) {
-    // 计算从模型默认原点到目标点的 4阶矩阵  向量相见
+    // 计算从模型默认原点到目标点的 4阶矩阵  向量相减
     const matrixMove = Cesium.Matrix4.fromTranslation(Cesium.Cartesian3.subtract(
         Cesium.Cartesian3.fromDegrees(positionLatlng.lng,positionLatlng.lat,positionLatlng.height),
         sourceCenter,
@@ -48,7 +48,7 @@ export function updateModelMatrix({tilesetId,sourceCenter,positionLatlng,
     const rotateMatrix = Cesium.Matrix4.multiply(rotateXMatrix,rotateMatrixTemp,new Cesium.Matrix4())
     // 在世界坐标中心,应用缩放,和旋转
     const yuanDianRotateScaleMatrix = Cesium.Matrix4.multiply(rotateMatrix,tempScaleMatrix,new Cesium.Matrix4())
-    // 旋转缩放后, 将模型应用平移到目标点的矩阵
+    // 旋转缩放后, 对模型应用平移到目标点的矩阵
     const yuanDianMoveMatrix = Cesium.Matrix4.multiply(matrixMove,yuanDianRotateScaleMatrix,new Cesium.Matrix4())
     // 移动回原来的坐标
     const matrix4Final = Cesium.Matrix4.multiply(backto_matrix,yuanDianMoveMatrix,new Cesium.Matrix4())
