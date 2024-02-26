@@ -1,0 +1,762 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="samkallon">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="最近踩坑了浏览器端的语音转文字,使用场景大概是如下 对着麦克风说唤醒词 如 “你好小度”然后 说出命令 如 “打开三维分析”然后系统读取文字 转拼音, 进行对应的操作 大概有如下几种路线 Web Speech API https:&#x2F;&#x2F;developer.mozilla.org&#x2F;zh-CN&#x2F;docs&#x2F;Web&#x2F;API&#x2F;Web_Speech_API  浏览器自带的api,chrome可以直接使用, 缺点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端语音转文字技术路线">
+<meta property="og:url" content="http://samkallon.top/blog/2023/08/21/%E5%89%8D%E7%AB%AF%E8%AF%AD%E9%9F%B3%E8%BD%AC%E6%96%87%E5%AD%97/index.html">
+<meta property="og:site_name" content="samkallon的博客">
+<meta property="og:description" content="最近踩坑了浏览器端的语音转文字,使用场景大概是如下 对着麦克风说唤醒词 如 “你好小度”然后 说出命令 如 “打开三维分析”然后系统读取文字 转拼音, 进行对应的操作 大概有如下几种路线 Web Speech API https:&#x2F;&#x2F;developer.mozilla.org&#x2F;zh-CN&#x2F;docs&#x2F;Web&#x2F;API&#x2F;Web_Speech_API  浏览器自带的api,chrome可以直接使用, 缺点">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://samkallon.top/2023/08/21/%E5%89%8D%E7%AB%AF%E8%AF%AD%E9%9F%B3%E8%BD%AC%E6%96%87%E5%AD%97/img.png">
+<meta property="article:published_time" content="2023-08-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-11-14T07:13:13.915Z">
+<meta property="article:author" content="samkallon">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="语音">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://samkallon.top/2023/08/21/%E5%89%8D%E7%AB%AF%E8%AF%AD%E9%9F%B3%E8%BD%AC%E6%96%87%E5%AD%97/img.png">
+  
+  
+  
+  <title>前端语音转文字技术路线 - samkallon的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"samkallon.top","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"b0wUVXqu71CY8Qh8zl6C1ykR-MdYXbMMI","app_key":"eFPndKItY79rSOviYMZTqUMg","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>samkallon的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="前端语音转文字技术路线"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-21 00:00" pubdate>
+          2023年8月21日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          70 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">前端语音转文字技术路线</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>最近踩坑了浏览器端的语音转文字,使用场景大概是如下</p>
+<p>对着麦克风说唤醒词 如 “你好小度”<br>然后 说出命令 如 “打开三维分析”<br>然后系统读取文字 转拼音, 进行对应的操作</p>
+<p>大概有如下几种路线</p>
+<h2 id="Web-Speech-API"><a href="#Web-Speech-API" class="headerlink" title="Web Speech API"></a>Web Speech API</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Speech_API">https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Speech_API</a></p>
+</blockquote>
+<p>浏览器自带的api,chrome可以直接使用, 缺点是需要连外网, 由于项目部署在内网,此方案最终放弃.</p>
+<hr>
+<h2 id="vosk"><a href="#vosk" class="headerlink" title="vosk"></a>vosk</h2><p>后端找到的本地部署的语音模型,可通过docker部署</p>
+<blockquote>
+<p>docker run -d -p 2700:2700 alphacep&#x2F;kaldi-en:latest</p>
+</blockquote>
+<p>前端通过websocket通信,发送AudioBuffer数据, 返回转换后的文本. 这里附上写好的vue组件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br></pre></td><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>  &lt;div class=&quot;sound-con&quot; v-if=&quot;recognizing&quot;&gt;<br>    &lt;div class=&quot;sound-con&quot;&gt;<br>      &lt;img :src=&quot;micUrl&quot; alt=&quot;&quot;&gt;<br>      &lt;div class=&quot;text&quot; v-if=&quot;final_transcript&quot;&gt;&#123;&#123; final_transcript &#125;&#125;&lt;/div&gt;<br>    &lt;/div&gt;<br>  &lt;/div&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>import &#123;pinyin&#125; from &#x27;pinyin-pro&#x27;;<br><br>export default &#123;<br>  name: &quot;SoundControl&quot;,<br>  data: () =&gt; &#123;<br>    return &#123;<br>      micUrl: &#x27;&#x27;,<br>      recognizing: false,<br>      final_transcript: &#x27;&#x27;,//最终生成的文本<br>      pyStr: &#x27;&#x27;,// 用于识别命令的拼音<br>      wsUrl: &#x27;ws://你的vosk服务地址&#x27;,<br>      webSocket: &#x27;&#x27;,<br>      streamLocal: &#x27;&#x27;, //声音流<br>      context: &quot;&quot;, // 声音处理上下文环境<br>      source: &#x27;&#x27;, //声音处理source<br>      processor: &#x27;&#x27;, //声音处理程序<br>      bufferSize: 8192 // 缓冲区大小<br>    &#125;<br>  &#125;,<br>  mounted: function () &#123;<br>    this.initWS()<br>    navigator.mediaDevices.getUserMedia(&#123;<br>      audio: &#123;<br>        channelCount: 1,<br>        echoCancellation: true,<br>        noiseSuppression: true,<br>        sampleRate: 8000<br>      &#125;, video: false<br>    &#125;).then(this.handleStream)<br>  &#125;,<br>  methods: &#123;<br>    handleStream(stream) &#123;<br>      this.streamLocal = stream<br>      this.context = new AudioContext(&#123;sampleRate: 8000&#125;);<br>      this.source = this.context.createMediaStreamSource(stream);<br>      this.processor = this.context.createScriptProcessor(this.bufferSize, 1, 1);<br><br>      this.source.connect(this.processor);<br>      this.processor.connect(this.context.destination);<br><br>      this.processor.onaudioprocess = (audioDataChunk) =&gt; &#123;<br>        // console.log(&#x27;audioDataChunk.inputBuffer :%o&#x27;, audioDataChunk.inputBuffer);<br>        this.sendAudio(audioDataChunk);<br>      &#125;;<br>    &#125;,<br>    sendAudio(audioDataChunk) &#123;<br>      if (this.webSocket.readyState === WebSocket.OPEN) &#123;<br>        // convert to 16-bit payload<br>        const inputData = audioDataChunk.inputBuffer.getChannelData(0) || new Float32Array(this.bufferSize);<br>        const targetBuffer = new Int16Array(inputData.length);<br>        for (let index = inputData.length; index &gt; 0; index--) &#123;<br>          targetBuffer[index] = 32767 * Math.min(1, inputData[index]);<br>        &#125;<br>        this.webSocket.send(targetBuffer.buffer);<br>      &#125;<br>    &#125;,<br>    initWS() &#123;<br>      this.webSocket = new WebSocket(this.wsUrl);<br>      this.webSocket.binaryType = &quot;arraybuffer&quot;;<br><br>      this.webSocket.onopen = function (event) &#123;<br>        console.log(&#x27;vosk语音转文本连接成功&#x27;);<br>      &#125;;<br><br>      this.webSocket.onerror = function (event) &#123;<br>        console.error(event.data);<br>      &#125;;<br><br>      this.webSocket.onmessage = (event) =&gt; &#123;<br>        if (event.data) &#123;<br>          let parsed = JSON.parse(event.data);<br>          if (parsed.text) &#123;<br>            console.log(&#x27;声音识别结果: %s&#x27;, parsed.text)<br>            // 先用唤醒词识别 请求第一次接口 返回文字转拼音 如果有 xiao du 则手动开启录音<br>            // 模糊音处理 统一使用前鼻音<br>            this.pyStr = pinyin(parsed.text, &#123;toneType: &#x27;none&#x27;&#125;).replaceAll(/ing/g, &#x27;in&#x27;).replaceAll(/eng/g, &#x27;en&#x27;)<br>            if (this.pyStr.includes(&#x27;xiao du&#x27;)) &#123;<br>              this.recognizing = true<br>              this.final_transcript = &#x27;我在! 您可以尝试说: 打开开挖分析&#x27;<br>              setTimeout(() =&gt; &#123;<br>                this.recognizing = false<br>                this.final_transcript = &#x27;&#x27;<br>              &#125;, 100000)<br>            &#125; else &#123;<br>              if (this.recognizing) &#123;<br>                this.final_transcript = parsed.text<br>                this.pyStr = pinyin(parsed.text, &#123;toneType: &#x27;none&#x27;&#125;).replaceAll(/ing/g, &#x27;in&#x27;)<br>                  .replaceAll(/eng/g, &#x27;en&#x27;).trim()<br>                  .replaceAll(/\s+/g,&#x27; &#x27;)<br>                this.$store.commit(&#x27;setSoundControl&#x27;, this.pyStr)<br>              &#125;<br>            &#125;<br>          &#125;<br>        &#125;<br>      &#125;;<br>    &#125;<br>  &#125;,<br>  watch: &#123;<br>    recognizing: &#123;<br>      handler(n) &#123;<br>        this.micUrl = n ? require(&#x27;@/assets/img/sound_record/mic-animate.gif&#x27;)<br>          : require(&#x27;@/assets/img/sound_record/mic.gif&#x27;)<br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;<br>&lt;/script&gt;<br><br>&lt;style lang=&quot;scss&quot; scoped&gt;<br>.sound-con &#123;<br>  position: fixed;<br>  left: 500px;<br>  bottom: 20px;<br>  cursor: pointer;<br>  background: rgba(60, 115, 102, 0.8);<br>  border-radius: 20px;<br>  height: 50px;<br><br>  display: flex;<br>  align-items: center;<br><br>  .text &#123;<br>    width: auto;<br>    height: 50px;<br>    color: white;<br>    border-radius: 20px;<br>    background: rgba(60, 115, 102, 0.8);<br>    margin-left: 20px;<br>    margin-right: 20px;<br>    line-height: 50px;<br>  &#125;<br>&#125;<br>&lt;/style&gt;<br><br></code></pre></td></tr></table></figure>
+
+<p>还有一个js, 可以将录音的流转换为blob,进而生成文件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Recorder</span> &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">stream, config</span>) &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">config</span> = config || &#123;&#125;;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">config</span>.<span class="hljs-property">sampleBits</span> = <span class="hljs-number">16</span>;      <span class="hljs-comment">//采样数位 8, 16</span><br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">config</span>.<span class="hljs-property">sampleRate</span> = <span class="hljs-number">16000</span>;   <span class="hljs-comment">//采样率(1/6 44100)</span><br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">context</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AudioContext</span>();<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">audioInput</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">context</span>.<span class="hljs-title function_">createMediaStreamSource</span>(stream);<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">recorder</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">context</span>.<span class="hljs-title function_">createScriptProcessor</span>(<span class="hljs-number">4096</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> = <span class="hljs-number">0</span>          <span class="hljs-comment">//录音文件长度</span><br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">buffer</span> = []     <span class="hljs-comment">//录音缓存</span><br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">inputDataList</span> = []<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">inputSampleRate</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">context</span>.<span class="hljs-property">sampleRate</span>    <span class="hljs-comment">//输入采样率</span><br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">inputSampleBits</span> = <span class="hljs-number">16</span>       <span class="hljs-comment">//输入采样数位 8, 16</span><br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">outputSampleRate</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">config</span>.<span class="hljs-property">sampleRate</span>    <span class="hljs-comment">//输出采样率</span><br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">oututSampleBits</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">config</span>.<span class="hljs-property">sampleBits</span>       <span class="hljs-comment">//输出采样数位 8, 16</span><br><br>    <span class="hljs-comment">//音频采集</span><br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">recorder</span>.<span class="hljs-property">onaudioprocess</span> =  <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> &#123;<br>      <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">input</span>(e.<span class="hljs-property">inputBuffer</span>.<span class="hljs-title function_">getChannelData</span>(<span class="hljs-number">0</span>));<br>      <span class="hljs-variable language_">this</span>.<span class="hljs-property">inputDataList</span>.<span class="hljs-title function_">push</span>(e)<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-title function_">input</span>(<span class="hljs-params">data</span>)&#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">buffer</span>.<span class="hljs-title function_">push</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Float32Array</span>(data));<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> += data.<span class="hljs-property">length</span>;<br>  &#125;<br>  compress () &#123; <span class="hljs-comment">//合并压缩</span><br>    <span class="hljs-comment">//合并</span><br>    <span class="hljs-keyword">let</span> data = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Float32Array</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span>);<br>    <span class="hljs-keyword">let</span> offset = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">buffer</span>.<span class="hljs-property">length</span>; i++) &#123;<br>      data.<span class="hljs-title function_">set</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">buffer</span>[i], offset);<br>      offset += <span class="hljs-variable language_">this</span>.<span class="hljs-property">buffer</span>[i].<span class="hljs-property">length</span>;<br>    &#125;<br>    <span class="hljs-comment">//压缩</span><br>    <span class="hljs-keyword">let</span> compression = <span class="hljs-built_in">parseInt</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">inputSampleRate</span> / <span class="hljs-variable language_">this</span>.<span class="hljs-property">outputSampleRate</span>);<br>    <span class="hljs-keyword">let</span> length = data.<span class="hljs-property">length</span> / compression;<br>    <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Float32Array</span>(length);<br>    <span class="hljs-keyword">let</span> index = <span class="hljs-number">0</span>, j = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (index &lt; length) &#123;<br>      result[index] = data[j];<br>      j += compression;<br>      index++;<br>    &#125;<br>    <span class="hljs-keyword">return</span> result;<br>  &#125;<br><br>  encodeWAV ()&#123;<br>    <span class="hljs-keyword">let</span> sampleRate = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">inputSampleRate</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">outputSampleRate</span>);<br>    <span class="hljs-keyword">let</span> sampleBits = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">inputSampleBits</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">oututSampleBits</span>);<br>    <span class="hljs-keyword">let</span> bytes = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">compress</span>();<br>    <span class="hljs-keyword">let</span> dataLength = bytes.<span class="hljs-property">length</span> * (sampleBits / <span class="hljs-number">8</span>);<br>    <span class="hljs-keyword">let</span> buffer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayBuffer</span>(<span class="hljs-number">44</span> + dataLength);<br>    <span class="hljs-keyword">let</span> data = <span class="hljs-keyword">new</span> <span class="hljs-title class_">DataView</span>(buffer);<br><br><br>    <span class="hljs-keyword">let</span> channelCount = <span class="hljs-number">1</span>;<span class="hljs-comment">//单声道</span><br>    <span class="hljs-keyword">let</span> offset = <span class="hljs-number">0</span>;<br><br><br>    <span class="hljs-keyword">let</span> writeString = <span class="hljs-keyword">function</span> (<span class="hljs-params">str</span>) &#123;<br>      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; str.<span class="hljs-property">length</span>; i++) &#123;<br>        data.<span class="hljs-title function_">setUint8</span>(offset + i, str.<span class="hljs-title function_">charCodeAt</span>(i));<br>      &#125;<br>    &#125;<br><br>    <span class="hljs-comment">// 资源交换文件标识符</span><br>    <span class="hljs-title function_">writeString</span>(<span class="hljs-string">&#x27;RIFF&#x27;</span>);<br>    offset += <span class="hljs-number">4</span>;<br>    <span class="hljs-comment">// 下个地址开始到文件尾总字节数,即文件大小-8</span><br>    data.<span class="hljs-title function_">setUint32</span>(offset, <span class="hljs-number">36</span> + dataLength, <span class="hljs-literal">true</span>);<br>    offset += <span class="hljs-number">4</span>;<br>    <span class="hljs-comment">// WAV文件标志</span><br>    <span class="hljs-title function_">writeString</span>(<span class="hljs-string">&#x27;WAVE&#x27;</span>);<br>    offset += <span class="hljs-number">4</span>;<br>    <span class="hljs-comment">// 波形格式标志</span><br>    <span class="hljs-title function_">writeString</span>(<span class="hljs-string">&#x27;fmt &#x27;</span>);<br>    offset += <span class="hljs-number">4</span>;<br>    <span class="hljs-comment">// 过滤字节,一般为 0x10 = 16</span><br>    data.<span class="hljs-title function_">setUint32</span>(offset, <span class="hljs-number">16</span>, <span class="hljs-literal">true</span>);<br>    offset += <span class="hljs-number">4</span>;<br>    <span class="hljs-comment">// 格式类别 (PCM形式采样数据)</span><br>    data.<span class="hljs-title function_">setUint16</span>(offset, <span class="hljs-number">1</span>, <span class="hljs-literal">true</span>);<br>    offset += <span class="hljs-number">2</span>;<br>    <span class="hljs-comment">// 通道数</span><br>    data.<span class="hljs-title function_">setUint16</span>(offset, channelCount, <span class="hljs-literal">true</span>);<br>    offset += <span class="hljs-number">2</span>;<br>    <span class="hljs-comment">// 采样率,每秒样本数,表示每个通道的播放速度</span><br>    data.<span class="hljs-title function_">setUint32</span>(offset, sampleRate, <span class="hljs-literal">true</span>);<br>    offset += <span class="hljs-number">4</span>;<br>    <span class="hljs-comment">// 波形数据传输率 (每秒平均字节数) 单声道×每秒数据位数×每样本数据位/8</span><br>    data.<span class="hljs-title function_">setUint32</span>(offset, channelCount * sampleRate * (sampleBits / <span class="hljs-number">8</span>), <span class="hljs-literal">true</span>);<br>    offset += <span class="hljs-number">4</span>;<br>    <span class="hljs-comment">// 快数据调整数 采样一次占用字节数 单声道×每样本的数据位数/8</span><br>    data.<span class="hljs-title function_">setUint16</span>(offset, channelCount * (sampleBits / <span class="hljs-number">8</span>), <span class="hljs-literal">true</span>);<br>    offset += <span class="hljs-number">2</span>;<br>    <span class="hljs-comment">// 每样本数据位数</span><br>    data.<span class="hljs-title function_">setUint16</span>(offset, sampleBits, <span class="hljs-literal">true</span>);<br>    offset += <span class="hljs-number">2</span>;<br>    <span class="hljs-comment">// 数据标识符</span><br>    <span class="hljs-title function_">writeString</span>(<span class="hljs-string">&#x27;data&#x27;</span>);<br>    offset += <span class="hljs-number">4</span>;<br>    <span class="hljs-comment">// 采样数据总数,即数据总大小-44</span><br>    data.<span class="hljs-title function_">setUint32</span>(offset, dataLength, <span class="hljs-literal">true</span>);<br>    offset += <span class="hljs-number">4</span>;<br>    <span class="hljs-comment">// 写入采样数据</span><br>    <span class="hljs-keyword">if</span> (sampleBits === <span class="hljs-number">8</span>) &#123;<br>      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; bytes.<span class="hljs-property">length</span>; i++, offset++) &#123;<br>        <span class="hljs-keyword">let</span> s = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(-<span class="hljs-number">1</span>, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(<span class="hljs-number">1</span>, bytes[i]));<br>        <span class="hljs-keyword">let</span> val = s &lt; <span class="hljs-number">0</span> ? s * <span class="hljs-number">0x8000</span> : s * <span class="hljs-number">0x7FFF</span>;<br>        val = <span class="hljs-built_in">parseInt</span>(<span class="hljs-number">255</span> / (<span class="hljs-number">65535</span> / (val + <span class="hljs-number">32768</span>)));<br>        data.<span class="hljs-title function_">setInt8</span>(offset, val, <span class="hljs-literal">true</span>);<br>      &#125;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; bytes.<span class="hljs-property">length</span>; i++, offset += <span class="hljs-number">2</span>) &#123;<br>        <span class="hljs-keyword">let</span> s = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(-<span class="hljs-number">1</span>, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(<span class="hljs-number">1</span>, bytes[i]));<br>        data.<span class="hljs-title function_">setInt16</span>(offset, s &lt; <span class="hljs-number">0</span> ? s * <span class="hljs-number">0x8000</span> : s * <span class="hljs-number">0x7FFF</span>, <span class="hljs-literal">true</span>);<br>      &#125;<br>    &#125;<br><br><br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Blob</span>([data], &#123;<span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;audio/wav&#x27;</span>&#125;);<br>  &#125;<br><br>  <span class="hljs-title function_">start</span>(<span class="hljs-params"></span>)&#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">audioInput</span>.<span class="hljs-title function_">connect</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">recorder</span>);<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">recorder</span>.<span class="hljs-title function_">connect</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">context</span>.<span class="hljs-property">destination</span>);<br>  &#125;<br>  <span class="hljs-title function_">stop</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">recorder</span>.<span class="hljs-title function_">disconnect</span>();<br>  &#125;<br><br>  getBlob () &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">stop</span>();<br>    <span class="hljs-keyword">const</span> data = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">encodeWAV</span>()<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> = <span class="hljs-number">0</span>          <span class="hljs-comment">//录音文件长度</span><br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">buffer</span> = []<br>    <span class="hljs-keyword">return</span> data<br>  &#125;<br><br>  <span class="hljs-title function_">play</span>(<span class="hljs-params">audio</span>) &#123;<br>    audio.<span class="hljs-property">src</span> = <span class="hljs-variable language_">window</span>.<span class="hljs-property">URL</span>.<span class="hljs-title function_">createObjectURL</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getBlob</span>());<br>  &#125;<br><br>&#125;<br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Recorder</span><br><br></code></pre></td></tr></table></figure>
+
+<h2 id="Whisper-Asr-Webservice"><a href="#Whisper-Asr-Webservice" class="headerlink" title="Whisper Asr Webservice"></a>Whisper Asr Webservice</h2><p>这个是我在github上找的,基于openAi的whisper 实现<br>也可以通过docker部署 详情参见github</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/ahmetoner/whisper-asr-webservice/">https://github.com/ahmetoner/whisper-asr-webservice/</a><br><a target="_blank" rel="noopener" href="https://github.com/openai/whisper/">https://github.com/openai/whisper/</a></p>
+</blockquote>
+<p>部署后, 测试wav文件是可以得到返回结果的</p>
+<img src="/2023/08/21/%E5%89%8D%E7%AB%AF%E8%AF%AD%E9%9F%B3%E8%BD%AC%E6%96%87%E5%AD%97/img.png" srcset="/img/loading.gif" lazyload class="" title="这是一个测试图片">
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%89%8D%E7%AB%AF/">#前端</a>
+      
+        <a href="/tags/%E8%AF%AD%E9%9F%B3/">#语音</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>前端语音转文字技术路线</div>
+      <div>http://samkallon.top/blog/2023/08/21/前端语音转文字/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>samkallon</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年8月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/08/21/Cesium%E5%AE%9E%E7%8E%B0%E6%A8%AA%E6%96%AD%E9%9D%A2%E5%88%86%E6%9E%90/" title="Cesium实现横断面分析">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Cesium实现横断面分析</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/03/17/xlsx%E5%AF%BC%E5%87%BA%E5%AE%BD%E5%BA%A6%E8%87%AA%E9%80%82%E5%BA%94/" title="xlsx导出宽度自适应">
+                        <span class="hidden-mobile">xlsx导出宽度自适应</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://lib.baomitu.com/waline/2.14.1/waline.min.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/waline/2.14.1/waline.min.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://blog-orxvib6c2-samkallon.vercel.app/","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"placeholder":"遗憾莫过于难忘你的背影，却找不到你来过的痕迹 ..."},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/floatVpn.js"></script>
+<script src="/js/sakana.js"></script>
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/containsWord.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/Cherry.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
