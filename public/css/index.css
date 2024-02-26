@@ -1,7 +1,0 @@
-html .sakana-box{
-    position: fixed;
-    z-index: 9999;
-    left: -250px;
-    bottom: 0;
-    transform-origin: 100% 100%; /* 从右下开始变换 */
-}
