@@ -24,7 +24,7 @@ plugins: [
 > 然后开始打包,打包结束会在根目录生成一个stats.html文件,打开后可以
 > 看到打包产物
 
-{% asset_img img.png 1%}
+{% asset_img img1.png 1121%}
 
 > 然后我发现几个geojson的文件巨大,最大的50多m,看来罪魁祸首就是他了
 ## 2.解决超大json问题
