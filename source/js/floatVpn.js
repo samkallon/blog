@@ -2,6 +2,7 @@
 const div = document.createElement('div')
 div.innerText = '高性价比梯子/翻墙推荐!'
 div.style.cssText = `
+display：none;
 position:fixed;
 right:0;
 top:50%;
