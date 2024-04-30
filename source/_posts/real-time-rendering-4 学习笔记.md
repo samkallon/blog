@@ -2,6 +2,7 @@
 title: Real-Time-Rendering-4 学习笔记
 date: 2024-04-30 16:03:16
 tags: [学习笔记, 图形学]
+index_img: /img/rtr4.png
 ---
 
 {% asset_img img.png 1212%}

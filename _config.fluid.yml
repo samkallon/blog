@@ -235,7 +235,7 @@ font:
 custom_js:
 #  - /js/floatVpn.js
   - /js/sakana.js
-  - //cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/containsWord.min.js # 鼠标点击出字
+#  - //cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/containsWord.min.js # 鼠标点击出字
 #  - //cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/runtime.min.js # 运行时间
   - //cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicLine.min.js # 动态黑色线条
   - //cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/Cherry.min.js #樱花飘落
