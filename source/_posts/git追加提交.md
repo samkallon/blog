@@ -1,5 +1,5 @@
 ---
-title: git追加提交
+title: git交互式变基的使用
 date: 2025-06-10 20:21:28
 tags: [git]
 ---
