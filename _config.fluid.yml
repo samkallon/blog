@@ -1007,10 +1007,10 @@ links:
   # Member item of page
   items:
     - {
-        - title: "胖小白",
-        - intro: "爱健身，爱科技，爱生活",
-        - link: "https://www.fatxiaobai.top/",
-        - avatar: "https://www.fatxiaobai.top/proxy-api/public/file/avatar/avatar.jpg"
+        title: "胖小白",
+        intro: "爱健身，爱科技，爱生活",
+        link: "https://www.fatxiaobai.top/",
+        avatar: "https://www.fatxiaobai.top/proxy-api/public/file/avatar/avatar.jpg"
       }
     - {
         title: "随遇而安",
